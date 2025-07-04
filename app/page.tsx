@@ -10,18 +10,14 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { Canvas } from "@react-three/fiber"
-import { OrbitControls, Sphere, MeshDistortMaterial } from "@react-three/drei"
 import { useTheme } from "next-themes"
+import dynamic from "next/dynamic"
 
-// 3D Animated Sphere Component
-function AnimatedSphere() {
-  return (
-    <Sphere visible args={[1, 100, 200]} scale={2}>
-      <MeshDistortMaterial color="#6366f1" attach="material" distort={0.3} speed={1.5} roughness={0} />
-    </Sphere>
-  )
-}
+// Dynamically import the Three.js scene to avoid SSR issues
+const ThreeScene = dynamic(() => import("@/components/three-scene").then((mod) => ({ default: mod.ThreeScene })), {
+  ssr: false,
+  loading: () => null,
+})
 
 // Navigation Component
 function Navigation({
@@ -139,15 +135,8 @@ function Navigation({
 function HeroSection() {
   return (
     <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      {/* 3D Background */}
-      <div className="absolute inset-0 -z-10">
-        <Canvas>
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} />
-          <AnimatedSphere />
-          <OrbitControls enableZoom={false} enablePan={false} />
-        </Canvas>
-      </div>
+      {/* 3D Background - Only render on client */}
+      <ThreeScene />
 
       <div className="container mx-auto px-4 text-center">
         <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
