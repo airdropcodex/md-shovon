@@ -1,25 +1,19 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Inter } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "sonner"
 import Script from "next/script"
 
-const geist = Geist({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-geist",
+  variable: "--font-inter",
   weight: ["300", "400", "500", "600", "700", "800"],
 })
 
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-geist-mono",
-  weight: ["400", "500", "600"],
-})
-
 export const metadata: Metadata = {
-  title: "MD. Shahariar Ahmmed Shovon - Vibe Coder | Full-Stack Developer",
+  title: "MD. Shahariar Ahmmed Shovon - Full-Stack Developer Portfolio",
   description:
     "Vibe Coder - Building fast, functional, and minimal web apps that solve real-world problems. Full-stack developer specializing in React, Next.js, and clean UI/UX design.",
   keywords:
@@ -51,7 +45,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geist.variable} ${geistMono.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} font-sans antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           {children}
           <Toaster position="top-right" richColors />
