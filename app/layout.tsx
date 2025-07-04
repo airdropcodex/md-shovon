@@ -1,14 +1,21 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Poppins } from "next/font/google"
+import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "sonner"
 import Script from "next/script"
 
-const poppins = Poppins({
+const geist = Geist({
   subsets: ["latin"],
+  variable: "--font-geist",
   weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-poppins",
+})
+
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+  weight: ["400", "500", "600"],
 })
 
 export const metadata: Metadata = {
@@ -44,9 +51,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${poppins.variable} font-sans`}>
+      <body className={`${geist.variable} ${geistMono.variable} font-sans antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           {children}
+          <Toaster position="top-right" richColors />
         </ThemeProvider>
 
         {/* Chatbase Integration */}
