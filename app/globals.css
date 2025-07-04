@@ -182,7 +182,7 @@ html {
   animation: float 6s ease-in-out infinite;
 }
 
-/* Infinite Scroll Animation */
+/* Infinite Scroll Animation - Optimized for all devices */
 @keyframes scroll-infinite {
   0% {
     transform: translateX(0);
@@ -193,9 +193,12 @@ html {
 }
 
 .animate-scroll-infinite {
-  animation: scroll-infinite 25s linear infinite;
+  animation: scroll-infinite 30s linear infinite;
   display: flex;
   width: fit-content;
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
 
 /* Pause animation on hover for better UX */
@@ -203,22 +206,47 @@ html {
   animation-play-state: paused;
 }
 
-/* Ensure smooth performance */
-.animate-scroll-infinite {
-  will-change: transform;
-  backface-visibility: hidden;
-  perspective: 1000px;
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .animate-scroll-infinite {
+    animation-duration: 40s; /* Slower on mobile for better readability */
+  }
+
+  /* Improve touch targets */
+  button,
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Better mobile spacing */
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }
 
-/* Hide scrollbars */
-.overflow-hidden {
-  overflow: hidden;
+/* Remove the mobile hide rule */
+/* @media (max-width: 768px) {
+  .animate-scroll-infinite {
+    display: none;
+  }
+} */
+
+/* Enhanced mobile responsiveness */
+@media (max-width: 640px) {
+  .animate-scroll-infinite {
+    animation-duration: 45s;
+  }
 }
 
-/* Smooth gradient transitions */
-.bg-gradient-to-r,
-.bg-gradient-to-l {
-  transition: opacity 0.3s ease;
+/* Smooth transitions for better performance */
+* {
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 /* Enhanced button animations */
@@ -252,7 +280,7 @@ html {
 }
 
 /* Improved mobile touch targets */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   button,
   a {
     min-height: 44px;
@@ -262,7 +290,7 @@ html {
   .animate-scroll-infinite {
     display: none;
   }
-}
+} */
 
 @media (max-width: 640px) {
   .container {

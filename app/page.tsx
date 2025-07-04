@@ -76,9 +76,9 @@ function Navigation({
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50"
+        className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-fit"
       >
-        <div className="bg-background/80 backdrop-blur-xl border border-border/50 rounded-2xl px-6 py-3 shadow-lg">
+        <div className="bg-background/80 backdrop-blur-xl border border-border/50 rounded-2xl px-4 sm:px-6 py-3 shadow-lg mx-4 sm:mx-0">
           <div className="flex items-center space-x-6">
             {/* Logo */}
             <motion.div whileHover={{ scale: 1.05 }} className="text-lg font-bold text-blue-600">
@@ -147,9 +147,9 @@ function Navigation({
             initial={{ opacity: 0, scale: 0.95, y: -20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
-            className="fixed top-20 left-1/2 transform -translate-x-1/2 z-40 md:hidden"
+            className="fixed top-20 left-4 right-4 z-40 md:hidden"
           >
-            <div className="bg-background/95 backdrop-blur-xl border border-border/50 rounded-2xl p-4 shadow-lg min-w-[200px]">
+            <div className="bg-background/95 backdrop-blur-xl border border-border/50 rounded-2xl p-4 shadow-lg">
               <div className="space-y-2">
                 {navItems.map((item) => (
                   <motion.button
@@ -293,7 +293,11 @@ function TechIcon({ tech }: { tech: { name: string; icon: string; hasIcon: boole
     <img
       src={tech.icon || "/placeholder.svg"}
       alt={tech.name}
-      className="w-8 h-8 object-contain flex-shrink-0 filter brightness-0 invert dark:brightness-100 dark:invert-0"
+      className="w-6 h-6 sm:w-8 sm:h-8 object-contain flex-shrink-0 filter brightness-0 invert dark:brightness-100 dark:invert-0"
+      style={{
+        imageRendering: "crisp-edges",
+        objectPosition: "center",
+      }}
       onError={() => setIconError(true)}
       onLoad={() => setIconError(false)}
     />
@@ -533,16 +537,16 @@ function AboutSection() {
             <CardContent className="p-8">
               <h3 className="font-display text-xl text-blue-600 mb-6">Tech Stack</h3>
 
-              {/* Desktop Infinite Scroll */}
-              <div className="hidden md:block relative">
+              {/* Infinite Scroll - Now works on all screen sizes */}
+              <div className="relative">
                 <div className="flex overflow-hidden">
                   <div className="flex animate-scroll-infinite">
                     {/* First set of tech stack - Icons only */}
                     {techStack
                       .filter((tech) => tech.hasIcon)
                       .map((tech, index) => (
-                        <div key={`first-icon-${tech.name}`} className="flex-shrink-0 mx-3">
-                          <div className="w-12 h-12 bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-all duration-300 border border-blue-200 dark:border-blue-800 hover:scale-110 cursor-default rounded-xl flex items-center justify-center shadow-sm hover:shadow-md">
+                        <div key={`first-icon-${tech.name}`} className="flex-shrink-0 mx-2 sm:mx-3">
+                          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-all duration-300 border border-blue-200 dark:border-blue-800 hover:scale-110 cursor-default rounded-xl flex items-center justify-center shadow-sm hover:shadow-md">
                             <TechIcon tech={tech} />
                           </div>
                         </div>
@@ -551,10 +555,10 @@ function AboutSection() {
                     {techStack
                       .filter((tech) => !tech.hasIcon)
                       .map((tech, index) => (
-                        <div key={`first-text-${tech.name}`} className="flex-shrink-0 mx-2">
+                        <div key={`first-text-${tech.name}`} className="flex-shrink-0 mx-1 sm:mx-2">
                           <Badge
                             variant="secondary"
-                            className="text-sm py-3 px-4 font-medium bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-all duration-300 border-blue-200 dark:border-blue-800 hover:scale-105 cursor-default whitespace-nowrap"
+                            className="text-xs sm:text-sm py-2 sm:py-3 px-3 sm:px-4 font-medium bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-all duration-300 border-blue-200 dark:border-blue-800 hover:scale-105 cursor-default whitespace-nowrap"
                           >
                             {tech.name}
                           </Badge>
@@ -564,8 +568,8 @@ function AboutSection() {
                     {techStack
                       .filter((tech) => tech.hasIcon)
                       .map((tech, index) => (
-                        <div key={`second-icon-${tech.name}`} className="flex-shrink-0 mx-3">
-                          <div className="w-12 h-12 bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-all duration-300 border border-blue-200 dark:border-blue-800 hover:scale-110 cursor-default rounded-xl flex items-center justify-center shadow-sm hover:shadow-md">
+                        <div key={`second-icon-${tech.name}`} className="flex-shrink-0 mx-2 sm:mx-3">
+                          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-all duration-300 border border-blue-200 dark:border-blue-800 hover:scale-110 cursor-default rounded-xl flex items-center justify-center shadow-sm hover:shadow-md">
                             <TechIcon tech={tech} />
                           </div>
                         </div>
@@ -573,10 +577,10 @@ function AboutSection() {
                     {techStack
                       .filter((tech) => !tech.hasIcon)
                       .map((tech, index) => (
-                        <div key={`second-text-${tech.name}`} className="flex-shrink-0 mx-2">
+                        <div key={`second-text-${tech.name}`} className="flex-shrink-0 mx-1 sm:mx-2">
                           <Badge
                             variant="secondary"
-                            className="text-sm py-3 px-4 font-medium bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-all duration-300 border-blue-200 dark:border-blue-800 hover:scale-105 cursor-default whitespace-nowrap"
+                            className="text-xs sm:text-sm py-2 sm:py-3 px-3 sm:px-4 font-medium bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-all duration-300 border-blue-200 dark:border-blue-800 hover:scale-105 cursor-default whitespace-nowrap"
                           >
                             {tech.name}
                           </Badge>
@@ -586,52 +590,8 @@ function AboutSection() {
                 </div>
 
                 {/* Gradient overlays for fade effect */}
-                <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-card/50 to-transparent pointer-events-none z-10" />
-                <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-card/50 to-transparent pointer-events-none z-10" />
-              </div>
-
-              {/* Mobile Grid */}
-              <div className="md:hidden grid grid-cols-3 sm:grid-cols-4 gap-4">
-                {/* Icons */}
-                {techStack
-                  .filter((tech) => tech.hasIcon)
-                  .map((tech, index) => (
-                    <motion.div
-                      key={tech.name}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ delay: index * 0.1, duration: 0.5 }}
-                      viewport={{ once: true }}
-                      className="flex flex-col items-center space-y-2"
-                    >
-                      <div className="w-12 h-12 bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-colors border border-blue-200 dark:border-blue-800 rounded-xl flex items-center justify-center">
-                        <TechIcon tech={tech} />
-                      </div>
-                      <span className="text-xs text-center text-muted-foreground font-medium">{tech.name}</span>
-                    </motion.div>
-                  ))}
-                {/* Text badges for technologies without icons */}
-                {techStack
-                  .filter((tech) => !tech.hasIcon)
-                  .map((tech, index) => (
-                    <motion.div
-                      key={tech.name}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ delay: (techStack.filter((t) => t.hasIcon).length + index) * 0.1, duration: 0.5 }}
-                      viewport={{ once: true }}
-                      className="col-span-2"
-                    >
-                      <Badge
-                        variant="secondary"
-                        className="w-full justify-center text-sm py-3 px-3 font-medium bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-colors border-blue-200 dark:border-blue-800"
-                      >
-                        {tech.name}
-                      </Badge>
-                    </motion.div>
-                  ))}
+                <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-card/50 to-transparent pointer-events-none z-10" />
+                <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-card/50 to-transparent pointer-events-none z-10" />
               </div>
             </CardContent>
           </Card>

@@ -124,7 +124,7 @@ const config: Config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "scroll-infinite": "scroll-infinite 25s linear infinite",
+        "scroll-infinite": "scroll-infinite 30s linear infinite",
       },
     },
   },
