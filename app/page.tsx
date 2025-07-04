@@ -34,7 +34,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { useTheme } from "next-themes"
 import { toast } from "sonner"
-import { Chatbot } from "@/components/chatbot"
 
 // Navigation Component
 function Navigation({
@@ -73,28 +72,28 @@ function Navigation({
 
   return (
     <>
-      {/* Dock-like Header - Fixed and Full Width */}
+      {/* Dock-like Header */}
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-[95%] max-w-4xl"
+        className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-fit"
       >
-        <div className="bg-background/95 backdrop-blur-xl border border-border/50 rounded-2xl px-6 py-4 shadow-xl">
-          <div className="flex items-center justify-between w-full">
+        <div className="bg-background/80 backdrop-blur-xl border border-border/50 rounded-2xl px-4 sm:px-6 py-3 shadow-lg mx-4 sm:mx-0">
+          <div className="flex items-center space-x-6">
             {/* Logo */}
-            <motion.div whileHover={{ scale: 1.05 }} className="text-lg font-bold text-blue-600 flex-shrink-0">
+            <motion.div whileHover={{ scale: 1.05 }} className="text-lg font-bold text-blue-600">
               Vibe Coder
             </motion.div>
 
-            {/* Desktop Navigation - Centered */}
-            <div className="hidden md:flex items-center space-x-8 flex-1 justify-center">
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-6">
               {navItems.map((item) => (
                 <motion.button
                   key={item.id}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => scrollToSection(item.id)}
-                  className={`text-sm font-medium transition-all duration-300 px-4 py-2 rounded-lg relative ${
+                  className={`text-sm font-medium transition-all duration-300 px-3 py-1.5 rounded-lg relative ${
                     activeSection === item.id
                       ? "text-blue-600 bg-blue-50 dark:bg-blue-950/20"
                       : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
@@ -103,10 +102,7 @@ function Navigation({
                   {item.label}
                 </motion.button>
               ))}
-            </div>
 
-            {/* Theme Toggle - Right Side */}
-            <div className="flex items-center space-x-2 flex-shrink-0">
               {mounted && (
                 <Button
                   variant="ghost"
@@ -117,18 +113,28 @@ function Navigation({
                   {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
                 </Button>
               )}
+            </div>
 
-              {/* Mobile Menu Button */}
-              <div className="md:hidden">
+            {/* Mobile Menu Button */}
+            <div className="md:hidden flex items-center space-x-2">
+              {mounted && (
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
                   className="rounded-lg"
                 >
-                  {isMobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+                  {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
                 </Button>
-              </div>
+              )}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="rounded-lg"
+              >
+                {isMobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+              </Button>
             </div>
           </div>
         </div>
@@ -141,9 +147,9 @@ function Navigation({
             initial={{ opacity: 0, scale: 0.95, y: -20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
-            className="fixed top-24 left-4 right-4 z-40 md:hidden"
+            className="fixed top-20 left-4 right-4 z-40 md:hidden"
           >
-            <div className="bg-background/95 backdrop-blur-xl border border-border/50 rounded-2xl p-4 shadow-xl">
+            <div className="bg-background/95 backdrop-blur-xl border border-border/50 rounded-2xl p-4 shadow-lg">
               <div className="space-y-2">
                 {navItems.map((item) => (
                   <motion.button
@@ -171,12 +177,12 @@ function Navigation({
 // Hero Section
 function HeroSection() {
   return (
-    <section
-      id="home"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden px-4 sm:px-6 bg-gradient-to-br from-blue-50 via-background to-indigo-50 dark:from-blue-950/20 dark:via-background dark:to-indigo-950/20"
-    >
-      {/* Optimized Floating Elements */}
+    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden px-4 sm:px-6">
+      {/* Animated Background */}
       <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-transparent to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20" />
+
+        {/* Floating Elements */}
         <motion.div
           animate={{
             y: [0, -20, 0],
@@ -275,7 +281,7 @@ function HeroSection() {
   )
 }
 
-// Optimized Tech Icon Component
+// Tech Icon Component with fallback
 function TechIcon({ tech }: { tech: { name: string; icon: string; hasIcon: boolean } }) {
   const [iconError, setIconError] = useState(false)
 
@@ -298,7 +304,7 @@ function TechIcon({ tech }: { tech: { name: string; icon: string; hasIcon: boole
   )
 }
 
-// About Section - Performance Optimized
+// About Section with Bento Cards
 function AboutSection() {
   const techStack = [
     {
@@ -376,30 +382,41 @@ function AboutSection() {
   ]
 
   return (
-    <section
-      id="about"
-      className="py-20 bg-gradient-to-br from-blue-50 via-background to-indigo-50 dark:from-blue-950/20 dark:via-background dark:to-indigo-950/20"
-    >
+    <section id="about" className="py-20 bg-muted/30">
       <div className="container mx-auto px-4 sm:px-6">
-        <div className="text-center mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
           <h2 className="font-display text-balance mb-4">About Me</h2>
           <p className="text-large text-muted-foreground font-medium">Learning, experimenting, and building solo</p>
-        </div>
+        </motion.div>
 
-        {/* Bento Grid Layout - Simplified animations */}
+        {/* Bento Grid Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
           {/* Profile Card - Large */}
-          <div className="lg:col-span-2">
-            <Card className="h-full border-0 bg-card/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="lg:col-span-2"
+          >
+            <Card className="h-full border-0 bg-card/50 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300">
               <CardContent className="p-8">
                 <div className="grid md:grid-cols-2 gap-8 items-center h-full">
                   <div className="flex justify-center">
                     <div className="relative">
                       <div className="w-64 h-64 rounded-2xl overflow-hidden border-4 border-blue-100 dark:border-blue-900 shadow-xl">
-                        <img
+                        <motion.img
                           src="/images/profile-photo.jpg"
                           alt="MD. Shahariar Ahmmed Shovon"
-                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                          className="w-full h-full object-cover"
+                          whileHover={{ scale: 1.05 }}
+                          transition={{ duration: 0.3 }}
                         />
                       </div>
                       <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full border-2 border-background animate-pulse" />
@@ -434,11 +451,16 @@ function AboutSection() {
                 </div>
               </CardContent>
             </Card>
-          </div>
+          </motion.div>
 
           {/* Stats Card */}
-          <div>
-            <Card className="h-full border-0 bg-blue-50/80 dark:bg-blue-950/30 shadow-lg">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <Card className="h-full border-0 bg-blue-50 dark:bg-blue-950/20 shadow-lg">
               <CardContent className="p-6">
                 <h3 className="font-display text-lg text-blue-600 mb-4">Quick Stats</h3>
                 <div className="space-y-4">
@@ -456,108 +478,130 @@ function AboutSection() {
                 </div>
               </CardContent>
             </Card>
-          </div>
+          </motion.div>
         </div>
 
         {/* Description Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <Card className="h-full border-0 bg-card/80 backdrop-blur-sm shadow-lg">
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-2 mb-4">
-                <Briefcase className="w-5 h-5 text-blue-600" />
-                <h3 className="font-display text-lg">What I Do</h3>
-              </div>
-              <p className="text-base text-muted-foreground text-pretty">
-                I specialize in building fast, functional, and minimal web apps that solve real-world problems. My
-                approach is simple: clean UI, straightforward UX, and working solo to ship projects without unnecessary
-                complexity.
-              </p>
-            </CardContent>
-          </Card>
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <Card className="h-full border-0 bg-card/50 backdrop-blur-sm shadow-lg">
+              <CardContent className="p-6">
+                <div className="flex items-center space-x-2 mb-4">
+                  <Briefcase className="w-5 h-5 text-blue-600" />
+                  <h3 className="font-display text-lg">What I Do</h3>
+                </div>
+                <p className="text-base text-muted-foreground text-pretty">
+                  I specialize in building fast, functional, and minimal web apps that solve real-world problems. My
+                  approach is simple: clean UI, straightforward UX, and working solo to ship projects without
+                  unnecessary complexity.
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
 
-          <Card className="h-full border-0 bg-card/80 backdrop-blur-sm shadow-lg">
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-2 mb-4">
-                <Calendar className="w-5 h-5 text-blue-600" />
-                <h3 className="font-display text-lg">Current Focus</h3>
-              </div>
-              <p className="text-base text-muted-foreground text-pretty">
-                I'm currently a student and love working independently, building things from the ground up. While I'm
-                open to collaborators (listed as contributors), I prefer maintaining creative control over my projects.
-              </p>
-            </CardContent>
-          </Card>
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <Card className="h-full border-0 bg-card/50 backdrop-blur-sm shadow-lg">
+              <CardContent className="p-6">
+                <div className="flex items-center space-x-2 mb-4">
+                  <Calendar className="w-5 h-5 text-blue-600" />
+                  <h3 className="font-display text-lg">Current Focus</h3>
+                </div>
+                <p className="text-base text-muted-foreground text-pretty">
+                  I'm currently a student and love working independently, building things from the ground up. While I'm
+                  open to collaborators (listed as contributors), I prefer maintaining creative control over my
+                  projects.
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
         </div>
 
-        {/* Tech Stack - Optimized */}
-        <Card className="border-0 bg-card/80 backdrop-blur-sm shadow-lg overflow-hidden">
-          <CardContent className="p-8">
-            <h3 className="font-display text-xl text-blue-600 mb-6">Tech Stack</h3>
+        {/* Tech Stack */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <Card className="border-0 bg-card/50 backdrop-blur-sm shadow-lg overflow-hidden">
+            <CardContent className="p-8">
+              <h3 className="font-display text-xl text-blue-600 mb-6">Tech Stack</h3>
 
-            {/* Optimized Infinite Scroll */}
-            <div className="relative">
-              <div className="flex overflow-hidden">
-                <div className="flex animate-scroll-smooth">
-                  {/* First set of tech stack */}
-                  {techStack
-                    .filter((tech) => tech.hasIcon)
-                    .map((tech, index) => (
-                      <div key={`first-icon-${tech.name}`} className="flex-shrink-0 mx-2 sm:mx-3">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-colors duration-300 border border-blue-200 dark:border-blue-800 rounded-xl flex items-center justify-center shadow-sm">
-                          <TechIcon tech={tech} />
+              {/* Infinite Scroll - Now works on all screen sizes */}
+              <div className="relative">
+                <div className="flex overflow-hidden">
+                  <div className="flex animate-scroll-infinite">
+                    {/* First set of tech stack - Icons only */}
+                    {techStack
+                      .filter((tech) => tech.hasIcon)
+                      .map((tech, index) => (
+                        <div key={`first-icon-${tech.name}`} className="flex-shrink-0 mx-2 sm:mx-3">
+                          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-all duration-300 border border-blue-200 dark:border-blue-800 hover:scale-110 cursor-default rounded-xl flex items-center justify-center shadow-sm hover:shadow-md">
+                            <TechIcon tech={tech} />
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  {/* Text labels for technologies without icons */}
-                  {techStack
-                    .filter((tech) => !tech.hasIcon)
-                    .map((tech, index) => (
-                      <div key={`first-text-${tech.name}`} className="flex-shrink-0 mx-1 sm:mx-2">
-                        <Badge
-                          variant="secondary"
-                          className="text-xs sm:text-sm py-2 sm:py-3 px-3 sm:px-4 font-medium bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-colors duration-300 border-blue-200 dark:border-blue-800 whitespace-nowrap"
-                        >
-                          {tech.name}
-                        </Badge>
-                      </div>
-                    ))}
-                  {/* Duplicate set for seamless loop */}
-                  {techStack
-                    .filter((tech) => tech.hasIcon)
-                    .map((tech, index) => (
-                      <div key={`second-icon-${tech.name}`} className="flex-shrink-0 mx-2 sm:mx-3">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-colors duration-300 border border-blue-200 dark:border-blue-800 rounded-xl flex items-center justify-center shadow-sm">
-                          <TechIcon tech={tech} />
+                      ))}
+                    {/* Text labels for technologies without icons */}
+                    {techStack
+                      .filter((tech) => !tech.hasIcon)
+                      .map((tech, index) => (
+                        <div key={`first-text-${tech.name}`} className="flex-shrink-0 mx-1 sm:mx-2">
+                          <Badge
+                            variant="secondary"
+                            className="text-xs sm:text-sm py-2 sm:py-3 px-3 sm:px-4 font-medium bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-all duration-300 border-blue-200 dark:border-blue-800 hover:scale-105 cursor-default whitespace-nowrap"
+                          >
+                            {tech.name}
+                          </Badge>
                         </div>
-                      </div>
-                    ))}
-                  {techStack
-                    .filter((tech) => !tech.hasIcon)
-                    .map((tech, index) => (
-                      <div key={`second-text-${tech.name}`} className="flex-shrink-0 mx-1 sm:mx-2">
-                        <Badge
-                          variant="secondary"
-                          className="text-xs sm:text-sm py-2 sm:py-3 px-3 sm:px-4 font-medium bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-colors duration-300 border-blue-200 dark:border-blue-800 whitespace-nowrap"
-                        >
-                          {tech.name}
-                        </Badge>
-                      </div>
-                    ))}
+                      ))}
+                    {/* Duplicate set for seamless loop */}
+                    {techStack
+                      .filter((tech) => tech.hasIcon)
+                      .map((tech, index) => (
+                        <div key={`second-icon-${tech.name}`} className="flex-shrink-0 mx-2 sm:mx-3">
+                          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-all duration-300 border border-blue-200 dark:border-blue-800 hover:scale-110 cursor-default rounded-xl flex items-center justify-center shadow-sm hover:shadow-md">
+                            <TechIcon tech={tech} />
+                          </div>
+                        </div>
+                      ))}
+                    {techStack
+                      .filter((tech) => !tech.hasIcon)
+                      .map((tech, index) => (
+                        <div key={`second-text-${tech.name}`} className="flex-shrink-0 mx-1 sm:mx-2">
+                          <Badge
+                            variant="secondary"
+                            className="text-xs sm:text-sm py-2 sm:py-3 px-3 sm:px-4 font-medium bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-all duration-300 border-blue-200 dark:border-blue-800 hover:scale-105 cursor-default whitespace-nowrap"
+                          >
+                            {tech.name}
+                          </Badge>
+                        </div>
+                      ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Gradient overlays for fade effect */}
-              <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-card/80 to-transparent pointer-events-none z-10" />
-              <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-card/80 to-transparent pointer-events-none z-10" />
-            </div>
-          </CardContent>
-        </Card>
+                {/* Gradient overlays for fade effect */}
+                <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-card/50 to-transparent pointer-events-none z-10" />
+                <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-card/50 to-transparent pointer-events-none z-10" />
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
       </div>
     </section>
   )
 }
 
-// Projects Section - Performance Optimized
+// Projects Section with Bento Layout
 function ProjectsSection() {
   const projects = [
     {
@@ -585,24 +629,34 @@ function ProjectsSection() {
   ]
 
   return (
-    <section
-      id="projects"
-      className="py-20 bg-gradient-to-br from-blue-50 via-background to-indigo-50 dark:from-blue-950/20 dark:via-background dark:to-indigo-950/20"
-    >
+    <section id="projects" className="py-20">
       <div className="container mx-auto px-4 sm:px-6">
-        <div className="text-center mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
           <h2 className="font-display text-balance mb-4">Featured Projects</h2>
           <p className="text-large text-muted-foreground font-medium">Solo projects built with passion and purpose</p>
-        </div>
+        </motion.div>
 
-        {/* Bento Grid for Projects - Simplified animations */}
+        {/* Bento Grid for Projects */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {projects.map((project, index) => (
-            <div key={project.id} className={project.featured ? "lg:col-span-1" : ""}>
-              <Card className="overflow-hidden hover:shadow-2xl transition-shadow duration-300 border-0 bg-card/80 backdrop-blur-sm shadow-lg group h-full">
+            <motion.div
+              key={project.id}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.2, duration: 0.8 }}
+              viewport={{ once: true }}
+              className={project.featured ? "lg:col-span-1" : ""}
+            >
+              <Card className="overflow-hidden hover:shadow-2xl transition-all duration-300 border-0 bg-card/50 backdrop-blur-sm shadow-lg group h-full">
                 <div className="aspect-video overflow-hidden relative">
-                  <img
-                    src={project.image || "/placeholder.svg"}
+                  <motion.img
+                    src={project.image}
                     alt={project.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
@@ -644,13 +698,19 @@ function ProjectsSection() {
                   </div>
                 </CardContent>
               </Card>
-            </div>
+            </motion.div>
           ))}
         </div>
 
         {/* More Projects Teaser */}
-        <div className="mt-12">
-          <Card className="border-0 bg-blue-50/80 dark:bg-blue-950/30 shadow-lg">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="mt-12"
+        >
+          <Card className="border-0 bg-blue-50 dark:bg-blue-950/20 shadow-lg">
             <CardContent className="p-8 text-center">
               <h3 className="font-display text-xl text-blue-600 mb-2">More Projects Coming Soon!</h3>
               <p className="text-muted-foreground mb-4 text-pretty">
@@ -668,13 +728,13 @@ function ProjectsSection() {
               </Button>
             </CardContent>
           </Card>
-        </div>
+        </motion.div>
       </div>
     </section>
   )
 }
 
-// Contact Section - Performance Optimized
+// Contact Section with Telegram Integration
 function ContactSection() {
   const [formData, setFormData] = useState({
     name: "",
@@ -754,21 +814,30 @@ function ContactSection() {
   ]
 
   return (
-    <section
-      id="contact"
-      className="py-20 bg-gradient-to-br from-blue-50 via-background to-indigo-50 dark:from-blue-950/20 dark:via-background dark:to-indigo-950/20"
-    >
+    <section id="contact" className="py-20 bg-muted/30">
       <div className="container mx-auto px-4 sm:px-6">
-        <div className="text-center mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
           <h2 className="font-display text-balance mb-4">Get In Touch</h2>
           <p className="text-large text-muted-foreground font-medium">Let's connect and discuss ideas</p>
-        </div>
+        </motion.div>
 
-        {/* Bento Grid Layout - Simplified */}
+        {/* Bento Grid Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Contact Form - Large */}
-          <div className="lg:col-span-2">
-            <Card className="border-0 bg-card/80 backdrop-blur-sm shadow-lg h-full">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="lg:col-span-2"
+          >
+            <Card className="border-0 bg-card/50 backdrop-blur-sm shadow-lg h-full">
               <CardContent className="p-8">
                 <div className="flex items-center space-x-2 mb-6">
                   <Send className="w-5 h-5 text-blue-600" />
@@ -825,7 +894,7 @@ function ContactSection() {
                   </Button>
                 </form>
 
-                <div className="mt-6 p-4 bg-blue-50/80 dark:bg-blue-950/30 rounded-lg">
+                <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
                   <div className="flex items-center space-x-2 text-blue-600 mb-2">
                     <CheckCircle className="w-4 h-4" />
                     <span className="text-sm font-medium">Message delivered via Telegram</span>
@@ -836,71 +905,94 @@ function ContactSection() {
                 </div>
               </CardContent>
             </Card>
-          </div>
+          </motion.div>
 
           {/* Contact Info & Social Links */}
           <div className="space-y-6">
             {/* Contact Info */}
-            <Card className="border-0 bg-card/80 backdrop-blur-sm shadow-lg">
-              <CardContent className="p-6">
-                <h3 className="font-display text-blue-600 mb-4">Connect With Me</h3>
-                <p className="text-muted-foreground mb-4 text-small text-pretty">
-                  I'm always excited to discuss new ideas, potential collaborations, or just chat about development.
-                </p>
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-2 text-sm">
-                    <MapPin className="w-4 h-4 text-blue-600" />
-                    <span>Bangladesh (UTC+6)</span>
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <Card className="border-0 bg-card/50 backdrop-blur-sm shadow-lg">
+                <CardContent className="p-6">
+                  <h3 className="font-display text-blue-600 mb-4">Connect With Me</h3>
+                  <p className="text-muted-foreground mb-4 text-small text-pretty">
+                    I'm always excited to discuss new ideas, potential collaborations, or just chat about development.
+                  </p>
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-2 text-sm">
+                      <MapPin className="w-4 h-4 text-blue-600" />
+                      <span>Bangladesh (UTC+6)</span>
+                    </div>
+                    <div className="flex items-center space-x-2 text-sm">
+                      <Mail className="w-4 h-4 text-blue-600" />
+                      <span>shovonali885@gmail.com</span>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-2 text-sm">
-                    <Mail className="w-4 h-4 text-blue-600" />
-                    <span>shovonali885@gmail.com</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </motion.div>
 
             {/* Social Links */}
-            <Card className="border-0 bg-card/80 backdrop-blur-sm shadow-lg">
-              <CardContent className="p-6">
-                <h4 className="font-display font-bold mb-4">Social Links</h4>
-                <div className="grid grid-cols-1 gap-2">
-                  {socialLinks.map((link, index) => (
-                    <a
-                      key={index}
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center space-x-3 p-2 rounded-lg border border-border/50 hover:bg-muted/50 transition-colors duration-300 hover:shadow-sm text-sm"
-                    >
-                      <link.icon className="h-4 w-4 text-blue-600" />
-                      <span className="font-medium">{link.label}</span>
-                    </a>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              <Card className="border-0 bg-card/50 backdrop-blur-sm shadow-lg">
+                <CardContent className="p-6">
+                  <h4 className="font-display font-bold mb-4">Social Links</h4>
+                  <div className="grid grid-cols-1 gap-2">
+                    {socialLinks.map((link, index) => (
+                      <motion.a
+                        key={index}
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center space-x-3 p-2 rounded-lg border border-border/50 hover:bg-muted/50 transition-all duration-300 hover:shadow-sm text-sm"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <link.icon className="h-4 w-4 text-blue-600" />
+                        <span className="font-medium">{link.label}</span>
+                      </motion.a>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
 
             {/* Status Card */}
-            <Card className="border-0 bg-blue-50/80 dark:bg-blue-950/30 shadow-lg">
-              <CardContent className="p-6">
-                <h4 className="font-display font-bold mb-3 text-blue-600">Current Status</h4>
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center space-x-2">
-                    <GraduationCap className="w-4 h-4 text-blue-600" />
-                    <span>Student & Solo Developer</span>
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              viewport={{ once: true }}
+            >
+              <Card className="border-0 bg-blue-50 dark:bg-blue-950/20 shadow-lg">
+                <CardContent className="p-6">
+                  <h4 className="font-display font-bold mb-3 text-blue-600">Current Status</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center space-x-2">
+                      <GraduationCap className="w-4 h-4 text-blue-600" />
+                      <span>Student & Solo Developer</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <X className="w-4 h-4 text-red-500" />
+                      <span>Not available for work right now</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="w-4 h-4 text-green-500" />
+                      <span>Open to collaborations (contributor basis)</span>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <X className="w-4 h-4 text-red-500" />
-                    <span>Not available for work right now</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    <span>Open to collaborations (contributor basis)</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </motion.div>
           </div>
         </div>
       </div>
@@ -950,16 +1042,13 @@ export default function Portfolio() {
         <ContactSection />
       </main>
 
-      <footer className="py-8 border-t border-border/50 bg-gradient-to-br from-blue-50 via-background to-indigo-50 dark:from-blue-950/20 dark:via-background dark:to-indigo-950/20">
+      <footer className="py-8 border-t border-border/50">
         <div className="container mx-auto px-4 sm:px-6 text-center">
           <p className="text-muted-foreground font-medium text-small">
             © 2024 Vibe Coder. Built with passion for clean, functional code.
           </p>
         </div>
       </footer>
-
-      {/* Chatbot - Fixed Position */}
-      <Chatbot />
     </div>
   )
 }

@@ -167,8 +167,23 @@ html {
   @apply bg-blue-500/20;
 }
 
-/* Performance Optimized Infinite Scroll Animation */
-@keyframes scroll-smooth {
+/* Custom animations */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.float-animation {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Infinite Scroll Animation - Optimized for all devices */
+@keyframes scroll-infinite {
   0% {
     transform: translateX(0);
   }
@@ -177,25 +192,24 @@ html {
   }
 }
 
-.animate-scroll-smooth {
-  animation: scroll-smooth 40s linear infinite;
+.animate-scroll-infinite {
+  animation: scroll-infinite 30s linear infinite;
   display: flex;
   width: fit-content;
   will-change: transform;
   backface-visibility: hidden;
   perspective: 1000px;
-  transform: translateZ(0);
 }
 
 /* Pause animation on hover for better UX */
-.animate-scroll-smooth:hover {
+.animate-scroll-infinite:hover {
   animation-play-state: paused;
 }
 
 /* Mobile optimizations */
 @media (max-width: 768px) {
-  .animate-scroll-smooth {
-    animation-duration: 50s; /* Slower on mobile for better readability */
+  .animate-scroll-infinite {
+    animation-duration: 40s; /* Slower on mobile for better readability */
   }
 
   /* Improve touch targets */
@@ -212,14 +226,21 @@ html {
   }
 }
 
+/* Remove the mobile hide rule */
+/* @media (max-width: 768px) {
+  .animate-scroll-infinite {
+    display: none;
+  }
+} */
+
 /* Enhanced mobile responsiveness */
 @media (max-width: 640px) {
-  .animate-scroll-smooth {
-    animation-duration: 60s;
+  .animate-scroll-infinite {
+    animation-duration: 45s;
   }
 }
 
-/* Performance optimizations */
+/* Smooth transitions for better performance */
 * {
   -webkit-transform: translateZ(0);
   -moz-transform: translateZ(0);
@@ -228,16 +249,59 @@ html {
   transform: translateZ(0);
 }
 
-/* Reduce motion for users who prefer it */
-@media (prefers-reduced-motion: reduce) {
-  .animate-scroll-smooth {
-    animation-duration: 120s;
+/* Enhanced button animations */
+@keyframes button-glow {
+  0%,
+  100% {
+    box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.1), 0 2px 4px -1px rgba(59, 130, 246, 0.06);
+  }
+  50% {
+    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.2), 0 4px 6px -2px rgba(59, 130, 246, 0.1);
+  }
+}
+
+.button-glow-animation {
+  animation: button-glow 2s ease-in-out infinite;
+}
+
+/* Smooth transitions for project cards */
+.project-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Enhanced focus states for better accessibility */
+.focus-enhanced:focus-visible {
+  @apply outline-none ring-2 ring-blue-500 ring-offset-2 ring-offset-background;
+  transform: scale(1.02);
+}
+
+/* Improved mobile touch targets */
+/* @media (max-width: 768px) {
+  button,
+  a {
+    min-height: 44px;
+    min-width: 44px;
   }
 
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  .animate-scroll-infinite {
+    display: none;
+  }
+} */
+
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media (min-width: 769px) {
+  .md\:hidden {
+    display: none !important;
   }
 }
 
@@ -248,22 +312,4 @@ html {
 
 .text-pretty {
   text-wrap: pretty;
-}
-
-/* Hardware acceleration for better performance */
-.gpu-accelerated {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  perspective: 1000px;
-}
-
-/* Optimize backdrop blur for performance */
-.backdrop-blur-sm {
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-}
-
-.backdrop-blur-xl {
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
 }
