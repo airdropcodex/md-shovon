@@ -182,6 +182,75 @@ html {
   animation: float 6s ease-in-out infinite;
 }
 
+/* Infinite Scroll Animation */
+@keyframes scroll-infinite {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-infinite {
+  animation: scroll-infinite 25s linear infinite;
+  display: flex;
+  width: fit-content;
+}
+
+/* Pause animation on hover for better UX */
+.animate-scroll-infinite:hover {
+  animation-play-state: paused;
+}
+
+/* Ensure smooth performance */
+.animate-scroll-infinite {
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Hide scrollbars */
+.overflow-hidden {
+  overflow: hidden;
+}
+
+/* Smooth gradient transitions */
+.bg-gradient-to-r,
+.bg-gradient-to-l {
+  transition: opacity 0.3s ease;
+}
+
+/* Enhanced button animations */
+@keyframes button-glow {
+  0%,
+  100% {
+    box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.1), 0 2px 4px -1px rgba(59, 130, 246, 0.06);
+  }
+  50% {
+    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.2), 0 4px 6px -2px rgba(59, 130, 246, 0.1);
+  }
+}
+
+.button-glow-animation {
+  animation: button-glow 2s ease-in-out infinite;
+}
+
+/* Smooth transitions for project cards */
+.project-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Enhanced focus states for better accessibility */
+.focus-enhanced:focus-visible {
+  @apply outline-none ring-2 ring-blue-500 ring-offset-2 ring-offset-background;
+  transform: scale(1.02);
+}
+
 /* Improved mobile touch targets */
 @media (max-width: 768px) {
   button,
@@ -189,13 +258,22 @@ html {
     min-height: 44px;
     min-width: 44px;
   }
+
+  .animate-scroll-infinite {
+    display: none;
+  }
 }
 
-/* Better spacing for mobile */
 @media (max-width: 640px) {
   .container {
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+}
+
+@media (min-width: 769px) {
+  .md\:hidden {
+    display: none !important;
   }
 }
 

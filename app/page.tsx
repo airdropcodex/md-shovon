@@ -71,85 +71,106 @@ function Navigation({
   }
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50"
-    >
-      <div className="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
-        <motion.div whileHover={{ scale: 1.05 }} className="text-xl font-bold text-blue-600">
-          Vibe Coder
-        </motion.div>
+    <>
+      {/* Dock-like Header */}
+      <motion.nav
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50"
+      >
+        <div className="bg-background/80 backdrop-blur-xl border border-border/50 rounded-2xl px-6 py-3 shadow-lg">
+          <div className="flex items-center space-x-6">
+            {/* Logo */}
+            <motion.div whileHover={{ scale: 1.05 }} className="text-lg font-bold text-blue-600">
+              Vibe Coder
+            </motion.div>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-8">
-          {navItems.map((item) => (
-            <motion.button
-              key={item.id}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => scrollToSection(item.id)}
-              className={`text-sm font-medium transition-colors relative ${
-                activeSection === item.id ? "text-blue-600" : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {item.label}
-              {activeSection === item.id && (
-                <motion.div
-                  layoutId="activeSection"
-                  className="absolute -bottom-1 left-0 right-0 h-0.5 bg-blue-600 rounded-full"
-                />
-              )}
-            </motion.button>
-          ))}
-
-          {mounted && (
-            <Button variant="ghost" size="icon" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
-              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </Button>
-          )}
-        </div>
-
-        {/* Mobile Menu Button */}
-        <div className="md:hidden flex items-center space-x-2">
-          {mounted && (
-            <Button variant="ghost" size="icon" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
-              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </Button>
-          )}
-          <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-            {isMobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-          </Button>
-        </div>
-      </div>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-background border-t"
-          >
-            <div className="container mx-auto px-4 py-4 space-y-4">
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-6">
               {navItems.map((item) => (
                 <motion.button
                   key={item.id}
+                  whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => scrollToSection(item.id)}
-                  className={`block w-full text-left text-sm font-medium transition-colors ${
-                    activeSection === item.id ? "text-blue-600" : "text-muted-foreground hover:text-foreground"
+                  className={`text-sm font-medium transition-all duration-300 px-3 py-1.5 rounded-lg relative ${
+                    activeSection === item.id
+                      ? "text-blue-600 bg-blue-50 dark:bg-blue-950/20"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                   }`}
                 >
                   {item.label}
                 </motion.button>
               ))}
+
+              {mounted && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                  className="rounded-lg"
+                >
+                  {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                </Button>
+              )}
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden flex items-center space-x-2">
+              {mounted && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                  className="rounded-lg"
+                >
+                  {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                </Button>
+              )}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="rounded-lg"
+              >
+                {isMobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+              </Button>
+            </div>
+          </div>
+        </div>
+      </motion.nav>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: -20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: -20 }}
+            className="fixed top-20 left-1/2 transform -translate-x-1/2 z-40 md:hidden"
+          >
+            <div className="bg-background/95 backdrop-blur-xl border border-border/50 rounded-2xl p-4 shadow-lg min-w-[200px]">
+              <div className="space-y-2">
+                {navItems.map((item) => (
+                  <motion.button
+                    key={item.id}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => scrollToSection(item.id)}
+                    className={`block w-full text-left text-sm font-medium transition-all duration-300 px-3 py-2 rounded-lg ${
+                      activeSection === item.id
+                        ? "text-blue-600 bg-blue-50 dark:bg-blue-950/20"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                    }`}
+                  >
+                    {item.label}
+                  </motion.button>
+                ))}
+              </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.nav>
+    </>
   )
 }
 
@@ -260,21 +281,93 @@ function HeroSection() {
   )
 }
 
+// Tech Icon Component with fallback
+function TechIcon({ tech }: { tech: { name: string; icon: string; hasIcon: boolean } }) {
+  const [iconError, setIconError] = useState(false)
+
+  if (!tech.hasIcon || iconError) {
+    return null
+  }
+
+  return (
+    <img
+      src={tech.icon || "/placeholder.svg"}
+      alt={tech.name}
+      className="w-8 h-8 object-contain flex-shrink-0 filter brightness-0 invert dark:brightness-100 dark:invert-0"
+      onError={() => setIconError(true)}
+      onLoad={() => setIconError(false)}
+    />
+  )
+}
+
 // About Section with Bento Cards
 function AboutSection() {
   const techStack = [
-    "React",
-    "Next.js",
-    "Node.js",
-    "TypeScript",
-    "Tailwind CSS",
-    "Vite",
-    "Supabase",
-    "Vercel",
-    "Render",
-    "Netlify",
-    "Git",
-    "Telegram Bot API",
+    {
+      name: "React",
+      icon: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/react-8Z4dkl9qHSG8mT6uSDOB86pQ53VR4e.png",
+      hasIcon: true,
+    },
+    {
+      name: "Next.js",
+      icon: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-krBWEF4oZIAX44csmvqXZZoHcWdz2i.png",
+      hasIcon: true,
+    },
+    {
+      name: "Node.js",
+      icon: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/nodejs-MSg9ZsBsQoVtSwmh3Jj3BMbeQ3nZQo.png",
+      hasIcon: true,
+    },
+    {
+      name: "TypeScript",
+      icon: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/typescript-EaOuL0vvo8nEOtNjC10QNSETG4ImX1.png",
+      hasIcon: true,
+    },
+    {
+      name: "Tailwind CSS",
+      icon: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/tailwindcss-aqpHQhurKIn9Cm6NEGTRsvYFvOTZ5p.png",
+      hasIcon: true,
+    },
+    {
+      name: "Vite",
+      icon: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/vitejs-5EAUA65ZGqYUeyZFwuiMxGBb2xpauM.png",
+      hasIcon: true,
+    },
+    {
+      name: "Supabase",
+      icon: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/supabase-K9a98SfDxA6EmM0ZrJrZGDT22YF9H7.png",
+      hasIcon: true,
+    },
+    {
+      name: "Vercel",
+      icon: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Vector_white-7s8AjPcyse6KQEJzp0Eh9mrQQ3afg3.png",
+      hasIcon: true,
+    },
+    {
+      name: "Render",
+      icon: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/render_white-iYlHexuWb9qfGyk3B6vVOgJVMguLeh.png",
+      hasIcon: true,
+    },
+    {
+      name: "Netlify",
+      icon: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/netlify2-FErR9GeYOmWa1LFprnE5h7wUgqLQy7.png",
+      hasIcon: true,
+    },
+    {
+      name: "GitHub",
+      icon: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/github_white-1zFE0vIy4DDMRUJIVxWdhQSDxNhkXq.png",
+      hasIcon: true,
+    },
+    {
+      name: "Git",
+      icon: "",
+      hasIcon: false,
+    },
+    {
+      name: "Telegram Bot API",
+      icon: "",
+      hasIcon: false,
+    },
   ]
 
   const stats = [
@@ -436,27 +529,109 @@ function AboutSection() {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <Card className="border-0 bg-card/50 backdrop-blur-sm shadow-lg">
+          <Card className="border-0 bg-card/50 backdrop-blur-sm shadow-lg overflow-hidden">
             <CardContent className="p-8">
               <h3 className="font-display text-xl text-blue-600 mb-6">Tech Stack</h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                {techStack.map((tech, index) => (
-                  <motion.div
-                    key={tech}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ delay: index * 0.1, duration: 0.5 }}
-                    viewport={{ once: true }}
-                  >
-                    <Badge
-                      variant="secondary"
-                      className="w-full justify-center text-sm py-2 px-3 font-medium bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-colors border-blue-200 dark:border-blue-800"
+
+              {/* Desktop Infinite Scroll */}
+              <div className="hidden md:block relative">
+                <div className="flex overflow-hidden">
+                  <div className="flex animate-scroll-infinite">
+                    {/* First set of tech stack - Icons only */}
+                    {techStack
+                      .filter((tech) => tech.hasIcon)
+                      .map((tech, index) => (
+                        <div key={`first-icon-${tech.name}`} className="flex-shrink-0 mx-3">
+                          <div className="w-12 h-12 bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-all duration-300 border border-blue-200 dark:border-blue-800 hover:scale-110 cursor-default rounded-xl flex items-center justify-center shadow-sm hover:shadow-md">
+                            <TechIcon tech={tech} />
+                          </div>
+                        </div>
+                      ))}
+                    {/* Text labels for technologies without icons */}
+                    {techStack
+                      .filter((tech) => !tech.hasIcon)
+                      .map((tech, index) => (
+                        <div key={`first-text-${tech.name}`} className="flex-shrink-0 mx-2">
+                          <Badge
+                            variant="secondary"
+                            className="text-sm py-3 px-4 font-medium bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-all duration-300 border-blue-200 dark:border-blue-800 hover:scale-105 cursor-default whitespace-nowrap"
+                          >
+                            {tech.name}
+                          </Badge>
+                        </div>
+                      ))}
+                    {/* Duplicate set for seamless loop */}
+                    {techStack
+                      .filter((tech) => tech.hasIcon)
+                      .map((tech, index) => (
+                        <div key={`second-icon-${tech.name}`} className="flex-shrink-0 mx-3">
+                          <div className="w-12 h-12 bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-all duration-300 border border-blue-200 dark:border-blue-800 hover:scale-110 cursor-default rounded-xl flex items-center justify-center shadow-sm hover:shadow-md">
+                            <TechIcon tech={tech} />
+                          </div>
+                        </div>
+                      ))}
+                    {techStack
+                      .filter((tech) => !tech.hasIcon)
+                      .map((tech, index) => (
+                        <div key={`second-text-${tech.name}`} className="flex-shrink-0 mx-2">
+                          <Badge
+                            variant="secondary"
+                            className="text-sm py-3 px-4 font-medium bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-all duration-300 border-blue-200 dark:border-blue-800 hover:scale-105 cursor-default whitespace-nowrap"
+                          >
+                            {tech.name}
+                          </Badge>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+
+                {/* Gradient overlays for fade effect */}
+                <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-card/50 to-transparent pointer-events-none z-10" />
+                <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-card/50 to-transparent pointer-events-none z-10" />
+              </div>
+
+              {/* Mobile Grid */}
+              <div className="md:hidden grid grid-cols-3 sm:grid-cols-4 gap-4">
+                {/* Icons */}
+                {techStack
+                  .filter((tech) => tech.hasIcon)
+                  .map((tech, index) => (
+                    <motion.div
+                      key={tech.name}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ delay: index * 0.1, duration: 0.5 }}
+                      viewport={{ once: true }}
+                      className="flex flex-col items-center space-y-2"
                     >
-                      {tech}
-                    </Badge>
-                  </motion.div>
-                ))}
+                      <div className="w-12 h-12 bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-colors border border-blue-200 dark:border-blue-800 rounded-xl flex items-center justify-center">
+                        <TechIcon tech={tech} />
+                      </div>
+                      <span className="text-xs text-center text-muted-foreground font-medium">{tech.name}</span>
+                    </motion.div>
+                  ))}
+                {/* Text badges for technologies without icons */}
+                {techStack
+                  .filter((tech) => !tech.hasIcon)
+                  .map((tech, index) => (
+                    <motion.div
+                      key={tech.name}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ delay: (techStack.filter((t) => t.hasIcon).length + index) * 0.1, duration: 0.5 }}
+                      viewport={{ once: true }}
+                      className="col-span-2"
+                    >
+                      <Badge
+                        variant="secondary"
+                        className="w-full justify-center text-sm py-3 px-3 font-medium bg-blue-50 dark:bg-blue-950/20 hover:bg-blue-100 dark:hover:bg-blue-950/30 transition-colors border-blue-200 dark:border-blue-800"
+                      >
+                        {tech.name}
+                      </Badge>
+                    </motion.div>
+                  ))}
               </div>
             </CardContent>
           </Card>
@@ -783,7 +958,7 @@ function ContactSection() {
             >
               <Card className="border-0 bg-card/50 backdrop-blur-sm shadow-lg">
                 <CardContent className="p-6">
-                  <h3 className="font-display text-lg text-blue-600 mb-4">Connect With Me</h3>
+                  <h3 className="font-display text-blue-600 mb-4">Connect With Me</h3>
                   <p className="text-muted-foreground mb-4 text-small text-pretty">
                     I'm always excited to discuss new ideas, potential collaborations, or just chat about development.
                   </p>
